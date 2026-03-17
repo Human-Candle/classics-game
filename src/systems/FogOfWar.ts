@@ -44,7 +44,8 @@ export class FogOfWar {
 
     const radiusPx = FOG_REVEAL_RADIUS * TILE_SIZE;
     const size = radiusPx * 2;
-    const gfx = this.scene.make.graphics({ x: 0, y: 0, add: false });
+    const gfx = this.scene.add.graphics({ x: 0, y: 0 });
+    gfx.setVisible(false);
 
     // Soft-edged circle
     const steps = 20;
