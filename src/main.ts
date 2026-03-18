@@ -26,7 +26,7 @@ const config: Phaser.Types.Core.GameConfig = {
   },
   scene: [BootScene, TitleScene, IntroScene, WorldScene, BattleScene, ShopScene, InventoryScene, BadgeScene, GameOverScene, VictoryScene],
   scale: {
-    mode: Phaser.Scale.NONE,
+    mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,
   },
   render: {
