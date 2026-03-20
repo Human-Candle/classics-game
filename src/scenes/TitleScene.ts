@@ -9,12 +9,22 @@ export class TitleScene extends Phaser.Scene {
 
   create(): void {
     // Start background music and persistent mute button (both persist across scenes)
-    if (!this.sound.get('bg-music')?.isPlaying) {
-      this.sound.play('bg-music', { loop: true, volume: 0.4 });
-    }
     if (!this.scene.isActive('MusicScene')) {
       this.scene.launch('MusicScene');
     }
+    // Browsers block autoplay until user interaction — resume AudioContext on first click
+    const startMusic = () => {
+      if (this.sound.locked) {
+        this.sound.once('unlocked', () => {
+          if (!this.sound.get('bg-music')?.isPlaying) {
+            this.sound.play('bg-music', { loop: true, volume: 0.4 });
+          }
+        });
+      } else if (!this.sound.get('bg-music')?.isPlaying) {
+        this.sound.play('bg-music', { loop: true, volume: 0.4 });
+      }
+    };
+    startMusic();
 
     const cx = VIEWPORT_WIDTH / 2;
     const cy = VIEWPORT_HEIGHT / 2;
