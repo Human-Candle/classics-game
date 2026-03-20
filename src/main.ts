@@ -10,6 +10,8 @@ import { BadgeScene } from './scenes/BadgeScene';
 import { GameOverScene } from './scenes/GameOverScene';
 import { IntroScene } from './scenes/IntroScene';
 import { VictoryScene } from './scenes/VictoryScene';
+import { GrottoScene } from './scenes/GrottoScene';
+import { MusicScene } from './scenes/MusicScene';
 
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
@@ -24,7 +26,7 @@ const config: Phaser.Types.Core.GameConfig = {
       debug: false,
     },
   },
-  scene: [BootScene, TitleScene, IntroScene, WorldScene, BattleScene, ShopScene, InventoryScene, BadgeScene, GameOverScene, VictoryScene],
+  scene: [BootScene, TitleScene, IntroScene, WorldScene, BattleScene, ShopScene, InventoryScene, BadgeScene, GameOverScene, VictoryScene, GrottoScene, MusicScene],
   scale: {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,

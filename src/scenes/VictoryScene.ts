@@ -72,7 +72,7 @@ export class VictoryScene extends Phaser.Scene {
     // Stats
     const statsY = 200;
     const stats = [
-      `All 36 characters captured!`,
+      `All 40 characters captured!`,
       `Battles won: ${state.stats.totalBattlesWon}`,
       `Battles lost: ${state.stats.totalBattlesLost}`,
       `Gold earned: ${state.stats.totalGoldEarned}`,

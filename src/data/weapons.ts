@@ -42,7 +42,7 @@ export const healthUpgrades: HealthUpgrade[] = [
     description: 'Food of the gods. Restores two lives.',
     livesRestored: 2,
     maxLifeIncrease: 0,
-    price: 150,
+    price: 85,
   },
   {
     id: 'heart-container',

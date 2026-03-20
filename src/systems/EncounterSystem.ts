@@ -6,6 +6,7 @@ export class EncounterSystem {
   private characters: ClassicalCharacter[];
   private capturedIds: Set<string>;
   private lastCheckStep = 0;
+  private allowedIds: Set<string> = new Set();
 
   constructor(characters: ClassicalCharacter[], capturedIds: string[]) {
     this.characters = characters;
@@ -16,37 +17,32 @@ export class EncounterSystem {
     this.capturedIds = new Set(capturedIds);
   }
 
-  checkEncounter(stepCount: number, playerTileX: number, playerTileY: number): ClassicalCharacter | null {
+  setAllowedCharacters(ids: string[]): void {
+    this.allowedIds = new Set(ids);
+  }
+
+  checkEncounter(stepCount: number, playerTileX: number, playerTileY: number, excludeIds?: Set<string>): ClassicalCharacter | null {
     if (stepCount - this.lastCheckStep < ENCOUNTER_CHECK_STEPS) return null;
     this.lastCheckStep = stepCount;
 
     if (!randomChance(ENCOUNTER_CHANCE)) return null;
 
-    // Determine difficulty zone based on distance from spawn (10,10)
-    const dist = Math.sqrt((playerTileX - 10) ** 2 + (playerTileY - 10) ** 2);
-    let targetDifficulty: 'easy' | 'medium' | 'hard';
-    if (dist < 20) targetDifficulty = 'easy';
-    else if (dist < 40) targetDifficulty = 'medium';
-    else targetDifficulty = 'hard';
-
-    // Filter to uncaptured characters of appropriate difficulty
+    // Filter to uncaptured characters in the allowed set, excluding visible ones on the map
     const candidates = this.characters.filter(
-      c => !this.capturedIds.has(c.id) && c.difficulty === targetDifficulty
+      c => !this.capturedIds.has(c.id) && this.allowedIds.has(c.id) && !excludeIds?.has(c.id)
     );
 
-    // If no candidates at this difficulty, try any uncaptured
-    const pool = candidates.length > 0
-      ? candidates
-      : this.characters.filter(c => !this.capturedIds.has(c.id));
+    if (candidates.length === 0) return null;
 
-    if (pool.length === 0) return null;
-
-    return pool[Math.floor(Math.random() * pool.length)];
+    return candidates[Math.floor(Math.random() * candidates.length)];
   }
 
   getRandomCharacter(): ClassicalCharacter | null {
-    const uncaptured = this.characters.filter(c => !this.capturedIds.has(c.id));
-    if (uncaptured.length === 0) return null;
-    return uncaptured[Math.floor(Math.random() * uncaptured.length)];
+    // Guardian encounters only use remaining uncaptured stage characters
+    const stageCandidates = this.characters.filter(
+      c => !this.capturedIds.has(c.id) && this.allowedIds.has(c.id)
+    );
+    if (stageCandidates.length === 0) return null;
+    return stageCandidates[Math.floor(Math.random() * stageCandidates.length)];
   }
 }

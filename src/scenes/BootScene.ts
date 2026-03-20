@@ -32,6 +32,9 @@ export class BootScene extends Phaser.Scene {
       loadingText.destroy();
     });
 
+    // Audio
+    this.load.audio('bg-music', 'assets/audio/Pixel Lanterns (2).mp3');
+
     // Generate textures procedurally (no external assets needed for MVP)
     this.generateTextures();
   }

@@ -8,14 +8,16 @@ export interface PlayerState {
   lives: number;
   maxLives: number;
   gold: number;
+  currentLevel: number;
   capturedCharacters: string[];
   inventory: InventorySlot[];
   equippedWeapon: string | null;
   ownedWeapons: string[];
   badges: string[];
-  revealedTiles: boolean[][];
+  revealedTiles: Record<number, boolean[][]>;
   lootedLocations: Record<string, number>;
   defeatedBy: string[];
+  grottoReadStages: number[];
   stats: {
     totalGoldEarned: number;
     totalItemsSold: number;
@@ -24,32 +26,27 @@ export interface PlayerState {
   };
 }
 
-import { MAP_WIDTH, MAP_HEIGHT, STARTING_LIVES } from '../config';
+import { STARTING_LIVES } from '../config';
+import { getLevelForCaptures } from '../data/levels';
 
 const SAVE_KEY = 'classics-game-save';
 
 export function createDefaultState(): PlayerState {
-  const revealedTiles: boolean[][] = [];
-  for (let x = 0; x < MAP_WIDTH; x++) {
-    revealedTiles[x] = [];
-    for (let y = 0; y < MAP_HEIGHT; y++) {
-      revealedTiles[x][y] = false;
-    }
-  }
-
   return {
-    position: { x: 10, y: 10 },
+    position: { x: 5, y: 5 },
     lives: STARTING_LIVES,
     maxLives: STARTING_LIVES,
     gold: 0,
+    currentLevel: 1,
     capturedCharacters: [],
     inventory: [],
     equippedWeapon: null,
     ownedWeapons: [],
     badges: [],
-    revealedTiles,
+    revealedTiles: {},
     lootedLocations: {},
     defeatedBy: [],
+    grottoReadStages: [],
     stats: {
       totalGoldEarned: 0,
       totalItemsSold: 0,
@@ -57,6 +54,19 @@ export function createDefaultState(): PlayerState {
       totalBattlesLost: 0,
     },
   };
+}
+
+export function getOrCreateRevealedTiles(
+  state: PlayerState, stage: number, width: number, height: number
+): boolean[][] {
+  if (!state.revealedTiles[stage]) {
+    const tiles: boolean[][] = [];
+    for (let x = 0; x < width; x++) {
+      tiles[x] = new Array(height).fill(false);
+    }
+    state.revealedTiles[stage] = tiles;
+  }
+  return state.revealedTiles[stage];
 }
 
 export function saveGame(state: PlayerState): void {
@@ -70,7 +80,19 @@ export function saveGame(state: PlayerState): void {
 export function loadGame(): PlayerState | null {
   try {
     const data = localStorage.getItem(SAVE_KEY);
-    if (data) return JSON.parse(data) as PlayerState;
+    if (data) {
+      const state = JSON.parse(data) as PlayerState;
+      // Migrate saves from before level system
+      if (state.currentLevel === undefined) {
+        state.currentLevel = getLevelForCaptures(state.capturedCharacters.length).level;
+      }
+      // Migrate old flat revealedTiles array to per-stage Record
+      if (Array.isArray(state.revealedTiles)) {
+        const oldTiles = state.revealedTiles as unknown as boolean[][];
+        (state as PlayerState).revealedTiles = { [state.currentLevel]: oldTiles };
+      }
+      return state;
+    }
   } catch {
     // corrupted save
   }

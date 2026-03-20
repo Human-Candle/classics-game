@@ -1,30 +1,34 @@
 import Phaser from 'phaser';
-import { TILE_SIZE, MAP_WIDTH, MAP_HEIGHT, FOG_REVEAL_RADIUS } from '../config';
+import { TILE_SIZE, FOG_REVEAL_RADIUS } from '../config';
 
 export class FogOfWar {
   private scene: Phaser.Scene;
   private rt: Phaser.GameObjects.RenderTexture;
+  private mapWidth: number;
+  private mapHeight: number;
   public revealedTiles: boolean[][];
 
-  constructor(scene: Phaser.Scene, revealedTiles?: boolean[][]) {
+  constructor(scene: Phaser.Scene, mapWidth: number, mapHeight: number, revealedTiles?: boolean[][]) {
     this.scene = scene;
+    this.mapWidth = mapWidth;
+    this.mapHeight = mapHeight;
 
     if (revealedTiles) {
       this.revealedTiles = revealedTiles;
     } else {
       this.revealedTiles = [];
-      for (let x = 0; x < MAP_WIDTH; x++) {
+      for (let x = 0; x < mapWidth; x++) {
         this.revealedTiles[x] = [];
-        for (let y = 0; y < MAP_HEIGHT; y++) {
+        for (let y = 0; y < mapHeight; y++) {
           this.revealedTiles[x][y] = false;
         }
       }
     }
 
     // Create the fog as a RenderTexture filled with dark color
-    const mapW = MAP_WIDTH * TILE_SIZE;
-    const mapH = MAP_HEIGHT * TILE_SIZE;
-    this.rt = scene.add.renderTexture(0, 0, mapW, mapH);
+    const pixelW = mapWidth * TILE_SIZE;
+    const pixelH = mapHeight * TILE_SIZE;
+    this.rt = scene.add.renderTexture(0, 0, pixelW, pixelH);
     this.rt.setOrigin(0, 0);
     this.rt.setDepth(20);
 
@@ -64,8 +68,8 @@ export class FogOfWar {
     const key = '__fog_eraser__';
     const brush = this.scene.make.image({ x: 0, y: 0, key, add: false });
 
-    for (let x = 0; x < MAP_WIDTH; x++) {
-      for (let y = 0; y < MAP_HEIGHT; y++) {
+    for (let x = 0; x < this.mapWidth; x++) {
+      for (let y = 0; y < this.mapHeight; y++) {
         if (this.revealedTiles[x]?.[y]) {
           const px = x * TILE_SIZE + TILE_SIZE / 2;
           const py = y * TILE_SIZE + TILE_SIZE / 2;
@@ -93,7 +97,7 @@ export class FogOfWar {
         if (dx * dx + dy * dy <= radius * radius) {
           const rx = tileX + dx;
           const ry = tileY + dy;
-          if (rx >= 0 && rx < MAP_WIDTH && ry >= 0 && ry < MAP_HEIGHT) {
+          if (rx >= 0 && rx < this.mapWidth && ry >= 0 && ry < this.mapHeight) {
             this.revealedTiles[rx][ry] = true;
           }
         }
@@ -102,7 +106,7 @@ export class FogOfWar {
   }
 
   isTileRevealed(tileX: number, tileY: number): boolean {
-    if (tileX < 0 || tileX >= MAP_WIDTH || tileY < 0 || tileY >= MAP_HEIGHT) return false;
+    if (tileX < 0 || tileX >= this.mapWidth || tileY < 0 || tileY >= this.mapHeight) return false;
     return this.revealedTiles[tileX]?.[tileY] ?? false;
   }
 

@@ -84,14 +84,16 @@ export class ShopScene extends Phaser.Scene {
   private showApothecary(state: PlayerState, onUpdate: (s: PlayerState) => void): void {
     const shopItems: ShopItem[] = healthUpgrades.map(h => {
       const atMaxLives = h.maxLifeIncrease > 0 && state.maxLives >= MAX_LIVES_CAP;
+      const livesFull = h.maxLifeIncrease === 0 && state.lives >= state.maxLives;
+      const unavailable = atMaxLives || livesFull;
       return {
         id: h.id,
         name: h.name,
         description: h.description + (h.maxLifeIncrease > 0 ? ` (+${h.maxLifeIncrease} max life)` : ` (+${h.livesRestored} life)`),
         price: h.price,
-        canAfford: state.gold >= h.price,
-        owned: atMaxLives,
-        ownedLabel: atMaxLives ? 'MAX' : undefined,
+        canAfford: state.gold >= h.price && !unavailable,
+        owned: unavailable,
+        ownedLabel: atMaxLives ? 'MAX' : livesFull ? 'FULL' : undefined,
       };
     });
 
@@ -99,6 +101,7 @@ export class ShopScene extends Phaser.Scene {
       const upgrade = healthUpgrades.find(h => h.id === id);
       if (!upgrade || state.gold < upgrade.price) return;
       if (upgrade.maxLifeIncrease > 0 && state.maxLives >= MAX_LIVES_CAP) return;
+      if (upgrade.maxLifeIncrease === 0 && state.lives >= state.maxLives) return;
 
       state.gold -= upgrade.price;
       this.healthSystem.restoreLives(state, upgrade.livesRestored);

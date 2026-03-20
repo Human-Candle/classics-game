@@ -48,19 +48,19 @@ export const badges: Badge[] = [
     id: 'gotta-read-em-all',
     name: "Gotta Read 'Em All",
     description: 'Capture every author',
-    condition: { type: 'capture_count', characterType: 'author', count: 18 },
+    condition: { type: 'capture_count', characterType: 'author', count: 20 },
   },
   {
     id: 'gallery-complete',
     name: 'Gallery Complete',
     description: 'Capture every artist',
-    condition: { type: 'capture_count', characterType: 'artist', count: 18 },
+    condition: { type: 'capture_count', characterType: 'artist', count: 20 },
   },
   {
     id: 'master-collector',
     name: 'Master Collector',
     description: 'Capture every character',
-    condition: { type: 'capture_count', count: 36 },
+    condition: { type: 'capture_count', count: 40 },
   },
   // Loot badges
   {

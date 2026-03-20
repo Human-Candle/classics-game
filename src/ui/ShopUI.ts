@@ -62,14 +62,14 @@ export class ShopUI {
     });
 
     // Close button
-    const closeBtn = this.scene.add.text(VIEWPORT_WIDTH / 2, VIEWPORT_HEIGHT - 40, '[ESC] Close', {
+    const closeBtn = this.scene.add.text(VIEWPORT_WIDTH / 2, VIEWPORT_HEIGHT - 40, '[SPACE] Close', {
       fontSize: '14px',
       color: '#888888',
     }).setOrigin(0.5).setInteractive({ useHandCursor: true });
     closeBtn.on('pointerdown', () => this.close());
     this.container.add(closeBtn);
 
-    this.scene.input.keyboard!.once('keydown-ESC', () => this.close());
+    this.scene.input.keyboard!.once('keydown-SPACE', () => this.close());
     this.container.setVisible(true);
   }
 
@@ -92,7 +92,7 @@ export class ShopUI {
     });
     this.container.add(descText);
 
-    const priceText = this.scene.add.text(VIEWPORT_WIDTH - 140, y + 5, `${item.price}g`, {
+    const priceText = this.scene.add.text(VIEWPORT_WIDTH - 140, y + 5, `${item.price} gold`, {
       fontSize: '14px',
       color: item.canAfford ? '#ffd700' : '#cc4444',
     });

@@ -3,12 +3,32 @@ import type { PlayerState } from '../utils/SaveManager';
 import { badges } from '../data/badges';
 import { items } from '../data/items';
 import { weapons } from '../data/weapons';
+import { levels, type LevelConfig } from '../data/levels';
+import type { StageMapConfig } from '../data/stages';
 
 export class ProgressionSystem {
   private allCharacters: ClassicalCharacter[];
 
   constructor(allCharacters: ClassicalCharacter[]) {
     this.allCharacters = allCharacters;
+  }
+
+  getCurrentLevel(state: PlayerState): LevelConfig {
+    return levels.find(l => l.level === state.currentLevel) ?? levels[0];
+  }
+
+  checkLevelUp(state: PlayerState, stageConfig: StageMapConfig): LevelConfig | null {
+    // Stage is complete when ALL stage characters are captured AND ALL stage locations are looted
+    const allCharsCaptured = stageConfig.characterIds.every(id => state.capturedCharacters.includes(id));
+    const allLocsLooted = stageConfig.locationIds.every(id => !!state.lootedLocations[id]);
+
+    if (allCharsCaptured && allLocsLooted) {
+      const nextLevel = levels.find(l => l.level === state.currentLevel + 1);
+      if (nextLevel) {
+        return nextLevel;
+      }
+    }
+    return null;
   }
 
   checkNewBadges(state: PlayerState): Badge[] {

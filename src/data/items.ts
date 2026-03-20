@@ -4,6 +4,9 @@ export const items: GameItem[] = [
   // === HOMER ===
   { id: 'iliad', name: 'The Iliad', type: 'book', creatorId: 'homer', year: -750, description: 'Epic poem about the Trojan War, focusing on the wrath of Achilles.', rarity: 'rare', baseValue: 150 },
   { id: 'odyssey', name: 'The Odyssey', type: 'book', creatorId: 'homer', year: -725, description: 'Epic poem following Odysseus on his journey home from Troy.', rarity: 'rare', baseValue: 150 },
+  // === SAPPHO ===
+  { id: 'hymn-to-aphrodite', name: 'Hymn to Aphrodite', type: 'book', creatorId: 'sappho', year: -600, description: 'Sappho\'s only complete surviving poem, a prayer to the goddess of love.', rarity: 'legendary', baseValue: 400 },
+  { id: 'sappho-fragments', name: 'Fragments of Sappho', type: 'book', creatorId: 'sappho', year: -590, description: 'Precious fragments of lyric poetry from the Tenth Muse.', rarity: 'rare', baseValue: 120 },
   // === VIRGIL ===
   { id: 'aeneid', name: 'The Aeneid', type: 'book', creatorId: 'virgil', year: -19, description: 'Latin epic poem telling the story of Aeneas, a Trojan who founded Rome.', rarity: 'rare', baseValue: 140 },
   { id: 'eclogues', name: 'Eclogues', type: 'book', creatorId: 'virgil', year: -37, description: 'Ten pastoral poems that established Virgil\'s reputation.', rarity: 'uncommon', baseValue: 60 },
@@ -12,6 +15,9 @@ export const items: GameItem[] = [
   { id: 'vita-nuova', name: 'La Vita Nuova', type: 'book', creatorId: 'dante', year: 1294, description: 'Prose and verse celebrating Dante\'s love for Beatrice.', rarity: 'uncommon', baseValue: 70 },
   // === CHAUCER ===
   { id: 'canterbury-tales', name: 'The Canterbury Tales', type: 'book', creatorId: 'chaucer', year: 1400, description: 'A collection of stories told by pilgrims on their way to Canterbury.', rarity: 'rare', baseValue: 130 },
+  // === CHRISTINE DE PIZAN ===
+  { id: 'book-city-of-ladies', name: 'The Book of the City of Ladies', type: 'book', creatorId: 'christine-de-pizan', year: 1405, description: 'An allegorical city built by history\'s greatest women.', rarity: 'rare', baseValue: 130 },
+  { id: 'treasure-city-of-ladies', name: 'The Treasure of the City of Ladies', type: 'book', creatorId: 'christine-de-pizan', year: 1405, description: 'A practical guide for women of all social classes.', rarity: 'uncommon', baseValue: 70 },
   // === SHAKESPEARE ===
   { id: 'hamlet', name: 'Hamlet', type: 'book', creatorId: 'shakespeare', year: 1601, description: 'The tragedy of the Prince of Denmark and his quest for revenge.', rarity: 'rare', baseValue: 120 },
   { id: 'romeo-and-juliet', name: 'Romeo and Juliet', type: 'book', creatorId: 'shakespeare', year: 1597, description: 'The most famous love story ever told.', rarity: 'uncommon', baseValue: 80 },
@@ -62,6 +68,10 @@ export const items: GameItem[] = [
   // === DA VINCI ===
   { id: 'mona-lisa', name: 'Mona Lisa', type: 'artwork', creatorId: 'da-vinci', year: 1503, description: 'The most famous portrait in the world, known for her enigmatic smile.', rarity: 'legendary', baseValue: 500 },
   { id: 'last-supper', name: 'The Last Supper', type: 'artwork', creatorId: 'da-vinci', year: 1498, description: 'Depicting the moment Jesus announces one of his disciples will betray him.', rarity: 'legendary', baseValue: 480 },
+  // === DÜRER ===
+  { id: 'melencolia-i', name: 'Melencolia I', type: 'artwork', creatorId: 'albrecht-durer', year: 1514, description: 'A mysterious engraving of a brooding angel surrounded by scientific instruments.', rarity: 'rare', baseValue: 160 },
+  { id: 'durer-rhinoceros', name: 'Rhinoceros', type: 'artwork', creatorId: 'albrecht-durer', year: 1515, description: 'A famous woodcut of a rhinoceros Dürer never actually saw.', rarity: 'uncommon', baseValue: 80 },
+  { id: 'praying-hands', name: 'Praying Hands', type: 'artwork', creatorId: 'albrecht-durer', year: 1508, description: 'An ink and pencil study that became one of the most reproduced images in history.', rarity: 'rare', baseValue: 140 },
   // === MICHELANGELO ===
   { id: 'sistine-ceiling', name: 'Sistine Chapel Ceiling', type: 'artwork', creatorId: 'michelangelo', year: 1512, description: 'The iconic ceiling featuring the Creation of Adam.', rarity: 'legendary', baseValue: 500 },
   { id: 'david-sculpture', name: 'David', type: 'artwork', creatorId: 'michelangelo', year: 1504, description: 'The 17-foot marble sculpture of the Biblical hero.', rarity: 'legendary', baseValue: 480 },
@@ -84,6 +94,9 @@ export const items: GameItem[] = [
   // === MONET ===
   { id: 'water-lilies', name: 'Water Lilies', type: 'artwork', creatorId: 'monet', year: 1906, description: 'Part of a series of approximately 250 oil paintings.', rarity: 'rare', baseValue: 140 },
   { id: 'impression-sunrise', name: 'Impression, Sunrise', type: 'artwork', creatorId: 'monet', year: 1872, description: 'The painting that gave Impressionism its name.', rarity: 'legendary', baseValue: 420 },
+  // === RENOIR ===
+  { id: 'bal-du-moulin', name: 'Bal du moulin de la Galette', type: 'artwork', creatorId: 'pierre-auguste-renoir', year: 1876, description: 'A joyful scene of Parisians dancing in dappled sunlight at Montmartre.', rarity: 'legendary', baseValue: 450 },
+  { id: 'luncheon-boating-party', name: 'Luncheon of the Boating Party', type: 'artwork', creatorId: 'pierre-auguste-renoir', year: 1881, description: 'Friends dining on a sunny terrace overlooking the Seine.', rarity: 'rare', baseValue: 160 },
   // === VAN GOGH ===
   { id: 'starry-night', name: 'The Starry Night', type: 'artwork', creatorId: 'van-gogh', year: 1889, description: 'Painted from the window of his asylum room at Saint-Rémy.', rarity: 'legendary', baseValue: 500 },
   { id: 'sunflowers', name: 'Sunflowers', type: 'artwork', creatorId: 'van-gogh', year: 1888, description: 'A series of still life paintings of sunflowers in a vase.', rarity: 'rare', baseValue: 160 },

@@ -60,7 +60,7 @@ export class BadgeScene extends Phaser.Scene {
       });
     });
 
-    this.add.text(VIEWPORT_WIDTH / 2, VIEWPORT_HEIGHT - 20, '[ESC] or [B] Close', {
+    this.add.text(VIEWPORT_WIDTH / 2, VIEWPORT_HEIGHT - 20, '[SPACE] or [B] Close', {
       fontSize: '12px',
       color: '#666666',
     }).setOrigin(0.5);
@@ -72,7 +72,7 @@ export class BadgeScene extends Phaser.Scene {
       world.events.emit('shop-closed');
     };
 
-    this.input.keyboard!.on('keydown-ESC', closeHandler);
+    this.input.keyboard!.on('keydown-SPACE', closeHandler);
     this.input.keyboard!.on('keydown-B', closeHandler);
   }
 }

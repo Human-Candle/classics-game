@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
-import { COLORS } from '../config';
 import type { PlayerState } from '../utils/SaveManager';
+import type { LevelConfig } from '../data/levels';
+import type { StageMapConfig } from '../data/stages';
 
 export class HUD {
   private scene: Phaser.Scene;
@@ -9,6 +10,8 @@ export class HUD {
   private goldText!: Phaser.GameObjects.Text;
   private capturedText!: Phaser.GameObjects.Text;
   private weaponText!: Phaser.GameObjects.Text;
+  private stageText!: Phaser.GameObjects.Text;
+  private progressBar!: Phaser.GameObjects.Graphics;
   private toastText!: Phaser.GameObjects.Text;
 
   constructor(scene: Phaser.Scene) {
@@ -20,51 +23,57 @@ export class HUD {
   }
 
   private build(): void {
-    // Background bar
-    const bg = this.scene.add.rectangle(400, 16, 800, 32, 0x000000, 0.7);
+    // Background bar - two rows
+    const bg = this.scene.add.rectangle(400, 20, 800, 40, 0x000000, 0.7);
     this.container.add(bg);
 
-    // Hearts
+    // Row 1 (y=6): Hearts | Gold | Weapon | Controls
     for (let i = 0; i < 8; i++) {
-      const heart = this.scene.add.text(10 + i * 22, 5, '♥', {
-        fontSize: '18px',
+      const heart = this.scene.add.text(10 + i * 20, 5, '♥', {
+        fontSize: '16px',
         color: '#e74c3c',
       });
       this.hearts.push(heart);
       this.container.add(heart);
     }
 
-    // Gold
-    this.goldText = this.scene.add.text(200, 8, '0g', {
-      fontSize: '14px',
+    this.goldText = this.scene.add.text(180, 6, '0 gold', {
+      fontSize: '13px',
       color: '#ffd700',
       fontStyle: 'bold',
     });
     this.container.add(this.goldText);
 
-    // Captured count
-    this.capturedText = this.scene.add.text(300, 8, 'Captured: 0', {
-      fontSize: '12px',
-      color: '#eee8d5',
-    });
-    this.container.add(this.capturedText);
-
-    // Weapon
-    this.weaponText = this.scene.add.text(450, 8, 'No weapon', {
-      fontSize: '12px',
+    this.weaponText = this.scene.add.text(240, 6, 'No weapon', {
+      fontSize: '11px',
       color: '#aaaaaa',
     });
     this.container.add(this.weaponText);
 
-    // Controls hint
-    const hint = this.scene.add.text(620, 8, '[I]nventory [B]adges', {
+    const hint = this.scene.add.text(750, 6, '[I] [B]', {
       fontSize: '10px',
-      color: '#666666',
+      color: '#555555',
     });
     this.container.add(hint);
 
+    // Row 2 (y=23): Stage name (era) | Progress | Captured count
+    this.stageText = this.scene.add.text(10, 24, '', {
+      fontSize: '11px',
+      color: '#aaaaaa',
+    });
+    this.container.add(this.stageText);
+
+    this.progressBar = this.scene.add.graphics();
+    this.container.add(this.progressBar);
+
+    this.capturedText = this.scene.add.text(700, 24, '', {
+      fontSize: '11px',
+      color: '#eee8d5',
+    });
+    this.container.add(this.capturedText);
+
     // Toast notification area
-    this.toastText = this.scene.add.text(400, 50, '', {
+    this.toastText = this.scene.add.text(400, 55, '', {
       fontSize: '14px',
       color: '#ffd700',
       backgroundColor: '#000000cc',
@@ -73,7 +82,7 @@ export class HUD {
     this.container.add(this.toastText);
   }
 
-  update(state: PlayerState, weaponName: string | null): void {
+  update(state: PlayerState, weaponName: string | null, levelConfig?: LevelConfig, stageConfig?: StageMapConfig): void {
     // Update hearts
     for (let i = 0; i < this.hearts.length; i++) {
       if (i < state.maxLives) {
@@ -84,10 +93,34 @@ export class HUD {
       }
     }
 
-    this.goldText.setText(`${state.gold}g`);
-    this.capturedText.setText(`Captured: ${state.capturedCharacters.length}/36`);
+    this.goldText.setText(`${state.gold} gold`);
     this.weaponText.setText(weaponName ?? 'No weapon');
     this.weaponText.setColor(weaponName ? '#eee8d5' : '#666666');
+
+    if (stageConfig && levelConfig) {
+      this.stageText.setText(`${stageConfig.name}  (${stageConfig.eraRange})  —  Lv.${levelConfig.level} ${levelConfig.name}`);
+
+      const captured = state.capturedCharacters.length;
+      const target = levelConfig.capturesForNext;
+      const stageProgress = captured - levelConfig.capturesRequired;
+      const stageTotal = target - levelConfig.capturesRequired;
+      this.capturedText.setText(`${stageProgress}/${stageTotal} captured`);
+
+      // Draw progress bar next to captured text
+      this.progressBar.clear();
+      const barX = 620;
+      const barY = 27;
+      const barW = 70;
+      const barH = 5;
+      const progress = Math.min(stageProgress / Math.max(1, stageTotal), 1);
+
+      this.progressBar.fillStyle(0x333333, 1);
+      this.progressBar.fillRect(barX, barY, barW, barH);
+      this.progressBar.fillStyle(0xc0a0ff, 1);
+      this.progressBar.fillRect(barX, barY, barW * progress, barH);
+    } else {
+      this.capturedText.setText(`Captured: ${state.capturedCharacters.length}/40`);
+    }
   }
 
   showToast(message: string, duration = 3000): void {

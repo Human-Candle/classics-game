@@ -61,7 +61,7 @@ export class InventoryScene extends Phaser.Scene {
     showCharacters();
 
     // Close
-    this.add.text(VIEWPORT_WIDTH / 2, VIEWPORT_HEIGHT - 20, '[ESC] or [I] Close', {
+    this.add.text(VIEWPORT_WIDTH / 2, VIEWPORT_HEIGHT - 20, '[SPACE] or [I] Close', {
       fontSize: '12px',
       color: '#666666',
     }).setOrigin(0.5);
@@ -73,7 +73,7 @@ export class InventoryScene extends Phaser.Scene {
       world.events.emit('shop-closed'); // reuse to unlock input
     };
 
-    this.input.keyboard!.on('keydown-ESC', closeHandler);
+    this.input.keyboard!.on('keydown-SPACE', closeHandler);
     this.input.keyboard!.on('keydown-I', closeHandler);
   }
 
@@ -174,7 +174,7 @@ export class InventoryScene extends Phaser.Scene {
       });
       container.add(name);
 
-      const value = this.add.text(VIEWPORT_WIDTH - 60, y + 8, `~${item.baseValue}g`, {
+      const value = this.add.text(VIEWPORT_WIDTH - 60, y + 8, `~${item.baseValue} gold`, {
         fontSize: '10px',
         color: '#ffd700',
       }).setOrigin(1, 0);
@@ -254,22 +254,22 @@ export class InventoryScene extends Phaser.Scene {
     }
 
     // Value
-    container.add(this.add.text(VIEWPORT_WIDTH / 2, 440, `Estimated value: ~${item.baseValue}g`, {
+    container.add(this.add.text(VIEWPORT_WIDTH / 2, 440, `Estimated value: ~${item.baseValue} gold`, {
       fontSize: '12px',
       color: '#ffd700',
     }).setOrigin(0.5));
 
     // Close button
-    const closeBtn = this.add.text(VIEWPORT_WIDTH / 2, VIEWPORT_HEIGHT - 35, '[ESC] Close', {
+    const closeBtn = this.add.text(VIEWPORT_WIDTH / 2, VIEWPORT_HEIGHT - 35, '[SPACE] Close', {
       fontSize: '14px',
       color: '#888888',
     }).setOrigin(0.5).setInteractive({ useHandCursor: true });
     closeBtn.on('pointerdown', () => this.closeDetail());
     container.add(closeBtn);
 
-    // ESC to close detail (not the whole inventory)
+    // SPACE to close detail (not the whole inventory)
     this.detailEscHandler = () => this.closeDetail();
-    this.input.keyboard!.once('keydown-ESC', this.detailEscHandler);
+    this.input.keyboard!.once('keydown-SPACE', this.detailEscHandler);
   }
 
   private async loadItemImage(
@@ -302,7 +302,7 @@ export class InventoryScene extends Phaser.Scene {
       this.detailContainer = null;
     }
     if (this.detailEscHandler) {
-      this.input.keyboard!.off('keydown-ESC', this.detailEscHandler);
+      this.input.keyboard!.off('keydown-SPACE', this.detailEscHandler);
       this.detailEscHandler = null;
     }
   }
