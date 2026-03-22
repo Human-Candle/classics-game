@@ -7,6 +7,7 @@ export class MusicScene extends Phaser.Scene {
   private btn!: Phaser.GameObjects.Text;
   private muted = false;
   private currentTrack: string | null = null;
+  private currentSound: Phaser.Sound.BaseSound | null = null;
   private ready = false;
   private pendingTrack: string | null = null;
 
@@ -51,16 +52,18 @@ export class MusicScene extends Phaser.Scene {
     if (this.currentTrack === key) return;
 
     // Stop current track
-    if (this.currentTrack) {
-      const current = this.sound.get(this.currentTrack);
-      if (current) current.stop();
+    if (this.currentSound) {
+      this.currentSound.stop();
+      this.currentSound.destroy();
+      this.currentSound = null;
     }
 
     this.currentTrack = key;
 
     const play = () => {
-      if (!this.sound.get(key)?.isPlaying) {
-        this.sound.play(key, { loop: true, volume: VOLUME });
+      if (!this.currentSound) {
+        this.currentSound = this.sound.add(key, { loop: true, volume: VOLUME });
+        this.currentSound.play();
       }
     };
 
