@@ -1,9 +1,12 @@
 import Phaser from 'phaser';
 import { VIEWPORT_WIDTH } from '../config';
 
+const VOLUME = 0.24;
+
 export class MusicScene extends Phaser.Scene {
   private btn!: Phaser.GameObjects.Text;
   private muted = false;
+  private currentTrack: string | null = null;
 
   constructor() {
     super({ key: 'MusicScene' });
@@ -24,6 +27,31 @@ export class MusicScene extends Phaser.Scene {
     this.btn.on('pointerdown', () => this.toggleMute());
 
     this.input.keyboard!.on('keydown-M', () => this.toggleMute());
+  }
+
+  /** Switch to a different music track (stops current if different). */
+  switchTrack(key: string): void {
+    if (this.currentTrack === key) return;
+
+    // Stop current track
+    if (this.currentTrack) {
+      const current = this.sound.get(this.currentTrack);
+      if (current) current.stop();
+    }
+
+    this.currentTrack = key;
+
+    const play = () => {
+      if (!this.sound.get(key)?.isPlaying) {
+        this.sound.play(key, { loop: true, volume: VOLUME });
+      }
+    };
+
+    if (this.sound.locked) {
+      this.sound.once('unlocked', play);
+    } else {
+      play();
+    }
   }
 
   private toggleMute(): void {

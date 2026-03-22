@@ -139,6 +139,10 @@ export class WorldScene extends Phaser.Scene {
     this.iKey = this.input.keyboard!.addKey('I');
     this.bKey = this.input.keyboard!.addKey('B');
 
+    // Switch to exploration music
+    const music = this.scene.get('MusicScene') as import('./MusicScene').MusicScene;
+    music.switchTrack('explore-music');
+
     // Listen for return from battle
     this.events.on('battle-result', this.handleBattleResult, this);
     this.events.on('shop-closed', () => { this.inputLocked = false; });
@@ -232,6 +236,9 @@ export class WorldScene extends Phaser.Scene {
         visibleIds
       );
       if (encounter) {
+        // Switch to ambush music
+        const ambushMusic = this.scene.get('MusicScene') as import('./MusicScene').MusicScene;
+        ambushMusic.switchTrack('menu-music');
         this.dialog.show(
           `You've been ambushed by ${encounter.name}!`,
           () => this.startBattle(encounter)
@@ -263,6 +270,10 @@ export class WorldScene extends Phaser.Scene {
   private handleBattleResult(result: { won: boolean; character: ClassicalCharacter; gold: number }): void {
     this.inputLocked = false;
     this.scene.resume();
+
+    // Switch back to exploration music
+    const music = this.scene.get('MusicScene') as import('./MusicScene').MusicScene;
+    music.switchTrack('explore-music');
 
     if (result.won) {
       this.state.capturedCharacters.push(result.character.id);
