@@ -140,6 +140,9 @@ export class WorldScene extends Phaser.Scene {
     this.bKey = this.input.keyboard!.addKey('B');
 
     // Switch to exploration music
+    if (!this.scene.isActive('MusicScene')) {
+      this.scene.launch('MusicScene');
+    }
     const music = this.scene.get('MusicScene') as import('./MusicScene').MusicScene;
     music.switchTrack('explore-music');
 
