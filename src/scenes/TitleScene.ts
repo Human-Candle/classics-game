@@ -17,11 +17,11 @@ export class TitleScene extends Phaser.Scene {
       if (this.sound.locked) {
         this.sound.once('unlocked', () => {
           if (!this.sound.get('bg-music')?.isPlaying) {
-            this.sound.play('bg-music', { loop: true, volume: 0.4 });
+            this.sound.play('bg-music', { loop: true, volume: 0.24 });
           }
         });
       } else if (!this.sound.get('bg-music')?.isPlaying) {
-        this.sound.play('bg-music', { loop: true, volume: 0.4 });
+        this.sound.play('bg-music', { loop: true, volume: 0.24 });
       }
     };
     startMusic();

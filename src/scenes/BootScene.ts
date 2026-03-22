@@ -33,7 +33,7 @@ export class BootScene extends Phaser.Scene {
     });
 
     // Audio
-    this.load.audio('bg-music', 'assets/audio/Pixel Dunes.mp3');
+    this.load.audio('bg-music', 'assets/audio/exploring_Savanna Paths.mp3');
 
     // Generate textures procedurally (no external assets needed for MVP)
     this.generateTextures();
