@@ -7,6 +7,8 @@ export class MusicScene extends Phaser.Scene {
   private btn!: Phaser.GameObjects.Text;
   private muted = false;
   private currentTrack: string | null = null;
+  private ready = false;
+  private pendingTrack: string | null = null;
 
   constructor() {
     super({ key: 'MusicScene' });
@@ -27,10 +29,25 @@ export class MusicScene extends Phaser.Scene {
     this.btn.on('pointerdown', () => this.toggleMute());
 
     this.input.keyboard!.on('keydown-M', () => this.toggleMute());
+
+    this.ready = true;
+
+    // Play any track that was requested before create() ran
+    if (this.pendingTrack) {
+      const key = this.pendingTrack;
+      this.pendingTrack = null;
+      this.switchTrack(key);
+    }
   }
 
   /** Switch to a different music track (stops current if different). */
   switchTrack(key: string): void {
+    // If scene isn't ready yet, queue the track for when create() fires
+    if (!this.ready) {
+      this.pendingTrack = key;
+      return;
+    }
+
     if (this.currentTrack === key) return;
 
     // Stop current track
