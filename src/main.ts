@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { inject as injectAnalytics } from '@vercel/analytics';
 import { VIEWPORT_WIDTH, VIEWPORT_HEIGHT } from './config';
 import { BootScene } from './scenes/BootScene';
 import { TitleScene } from './scenes/TitleScene';
@@ -12,6 +13,9 @@ import { IntroScene } from './scenes/IntroScene';
 import { VictoryScene } from './scenes/VictoryScene';
 import { GrottoScene } from './scenes/GrottoScene';
 import { MusicScene } from './scenes/MusicScene';
+
+// Initialize Vercel Web Analytics
+injectAnalytics();
 
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
